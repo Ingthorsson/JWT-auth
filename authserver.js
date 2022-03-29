@@ -20,9 +20,14 @@ app.get('/token', (req, res) => {
     })
 });
 
-app.post('/login', (req, res) => {
-    //Authenticate user
+app.delete('/logout', (req, res) => {
+    refreshTokens = refreshTokens.filter(token => token !== req.body.token);
+    res.sendStatus(204)
+})
 
+//Authenticate user
+app.post('/login', (req, res) => {
+    //  PUT THE AUTHENTICATION HERE
     const username = req.body.username;
     const user = { name: username };
     const accessToken = generateAccessToken(user);
@@ -34,7 +39,5 @@ app.post('/login', (req, res) => {
 function generateAccessToken(user) {
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '30s'});
 }
-
-
 
 app.listen(4000);
